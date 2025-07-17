@@ -1,0 +1,5 @@
+write a c program to check weather a input string contains only alphanumeric chars, whitespaces and allowed symbols(*&^%#$!(),;)
+count and print the number of keywords in a source code, compare each token with a keyword list
+identify all delimiters like ; , () and punctuation symbols
+recognize characters and string literals enclosed '' or ""
+Write a lex program to identify keywords identifiers and numbers
