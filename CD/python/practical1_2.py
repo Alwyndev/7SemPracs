@@ -128,7 +128,6 @@ def tokenize(input_string):
         # Creates an UNKNOWN token for unrecognized characters
         i += 1
         # Moves to next character
-    
     return tokens
     # Returns the complete list of tokens
 
