@@ -1,31 +1,39 @@
 #include <stdio.h>
+#include <ctype.h>
 #include <string.h>
 
+int isDelimiter(char ch) {
+    // Common delimiters
+    return (ch == ';' || ch == ',' || ch == '(' || ch == ')' || ch == '{' || ch == '}' ||
+            ch == '[' || ch == ']' || ch == ':' || ch == '.');
+}
+
+int isPunctuation(char ch) {
+    // Common punctuation marks
+    return (ch == '!' || ch == '?' || ch == '\'' || ch == '"' || ch == '-' || ch == '#' || ch == '@' || ch == '/');
+}
+
 int main() {
-    char program[1000];
+    char input[1000];
 
-    printf("Enter C source code: ");
-    fgets(program, sizeof(program), stdin);
+    printf("Enter the text/code (end input with a single $ on a new line):\n");
 
-    printf("Found literals:\n");
+    // Read multiline input until "$"
+    char temp[200];
+    input[0] = '\0';
+    while (1) {
+        fgets(temp, sizeof(temp), stdin);
+        if (temp[0] == '$' && temp[1] == '\n') break;
+        strcat(input, temp);
+    }
 
-    for (int i = 0; program[i] != '\0'; i++) {
-        if (program[i] == '"') {
-            printf("String literal: ");
-            i++;
-            while (program[i] != '"' && program[i] != '\0') {
-                putchar(program[i]);
-                i++;
-            }
-            printf("\n");
-        } else if (program[i] == '\'') {
-            printf("Character literal: ");
-            i++;
-            while (program[i] != '\'' && program[i] != '\0') {
-                putchar(program[i]);
-                i++;
-            }
-            printf("\n");
+    printf("\nIdentified Delimiters and Punctuation:\n");
+
+    for (int i = 0; input[i] != '\0'; i++) {
+        if (isDelimiter(input[i])) {
+            printf("Delimiter: '%c' at position %d\n", input[i], i);
+        } else if (isPunctuation(input[i])) {
+            printf("Punctuation: '%c' at position %d\n", input[i], i);
         }
     }
 
