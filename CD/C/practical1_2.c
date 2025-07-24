@@ -1,40 +1,53 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
-struct Token{
-    char *type;
-    char* value;
+const char *keywords[] = {
+    "auto", "break", "case", "char", "const", "continue", "default",
+    "do", "double", "else", "enum", "extern", "float", "for", "goto",
+    "if", "int", "long", "register", "return", "short", "signed",
+    "sizeof", "static", "struct", "switch", "typedef", "union",
+    "unsigned", "void", "volatile", "while"
 };
 
-struct Token* createToken(char *type, char *value) {
-    struct Token* token = (struct Token*)malloc(sizeof(struct Token));
-    token->type = type;
-    token->value = value;
-    return token;
-}
+#define TOTAL_KEYWORDS (sizeof(keywords)/sizeof(keywords[0]))
 
-void freeToken(struct Token* token) {
-    if (token) {
-        free(token->value);
-        free(token);
+int isKeyword(const char *word) {
+    for (int i = 0; i < TOTAL_KEYWORDS; i++) {
+        if (strcmp(word, keywords[i]) == 0)
+            return 1;
     }
-}
-
-void printToken(struct Token* token) {
-    if (token) {
-        printf("Token Type: %s, Value: %s\n", token->type, token->value);
-    }
-}
-
-struct keyword{
-    char* name;
-};
-int main() {
-    // Example usage
-    struct Token* token = createToken("IDENtIFIER", "myVariable");
-    printToken(token);
-    freeToken(token);
     return 0;
+}
 
+int main() {
+    char program[1000], word[100];
+    int keywordCount = 0;
+    int i = 0, j = 0;
 
+    printf("Enter C source code: ");
+    fgets(program, sizeof(program), stdin);
+
+    // Parse the input string word by word
+    while (i < strlen(program)) {
+        // Skip whitespace and special characters
+        while (i < strlen(program) && (!isalnum(program[i]) && program[i] != '_')) {
+            i++;
+        }
+        
+        // Extract word (identifier/keyword)
+        j = 0;
+        while (i < strlen(program) && (isalnum(program[i]) || program[i] == '_')) {
+            word[j++] = program[i++];
+        }
+        word[j] = '\0';
+        
+        // Check if it's a keyword
+        if (j > 0 && isKeyword(word)) {
+            keywordCount++;
+        }
+    }
+
+    printf("Total number of keywords: %d\n", keywordCount);
+    return 0;
 }
