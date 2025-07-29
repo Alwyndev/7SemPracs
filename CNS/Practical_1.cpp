@@ -268,71 +268,181 @@ string decipherVinereCipher(string cipher, string key){
     return plain_text;
 }
 
-int main() {
-    string message;
-    cout << "Enter the Message: ";
-    getline(cin, message);
+// Affine Cipher functions
+string affineCipher(string message, int key1, int key2) {
+    string cipher_text = "";
+    for (int i = 0; i < message.length(); i++ ){
+        char ch = message[i];
+        if (isalpha(ch)) {
+            char base = isupper(ch) ? 'A' : 'a';
+            ch = (key1 * (ch - base) + key2) % 26 + base; // apply affine formula
+        }
+        cipher_text += ch;
+    }
+    return cipher_text;
+}
 
-    int choice;
-    cout << "=== Cryptography Cipher Menu ===\n";
-    cout << "1. Playfair Cipher\n";
-    cout << "2. Hill Cipher\n";
-    cout << "3. Caesar Cipher\n";
-    cout << "4. Vigenere Cipher\n";
-    cout << "Enter choice (1-4): ";
-    cin >> choice;
+string affineDecipher(string cipher_text, int key1, int key2) {
+    string message = "";
+    int key1_inv = modInverse(key1, 26); // find modular inverse of key1
+    for (int i = 0; i < cipher_text.length(); i++ ){
+        char ch = cipher_text[i];
+        if (isalpha(ch)) {
+            char base = isupper(ch) ? 'A' : 'a';
+            ch = (key1_inv * ((ch - base) - key2 + 26)) % 26 + base; // apply inverse affine formula
+        }
+        message += ch;
+    }
+    return message;
+}
+
+// Vernam Cipher functions
+string classicVernamCipher(string message, string key) {
+    string cipher_text = "";
+    for (size_t i = 0; i < message.length(); i++) {
+        char ch = message[i];
+        char k = key[i % key.length()]; // repeat key as necessary
+        if (isalpha(ch) && isalpha(k)) {
+            char base = isupper(ch) ? 'A' : 'a';
+            ch = (ch - base + (k - base)) % 26 + base;
+        }
+        cipher_text += ch;
+    }
+    return cipher_text;
+}
+
+string classicVernamDecipher(string cipher_text, string key) {
+    string message = "";
+    for (size_t i = 0; i < cipher_text.length(); i++) {
+        char ch = cipher_text[i];
+        char k = key[i % key.length()]; // repeat key as necessary
+        if (isalpha(ch) && isalpha(k)) {
+            char base = isupper(ch) ? 'A' : 'a';
+            ch = (ch - base - (k - base) + 26) % 26 + base;
+        }
+        message += ch;
+    }
+    return message;
+}
+
+// string modifiedVernamCipher(string message, string key){
+
+// }
+
+int main() {
+    int cipherType;
+    cout << "=== Cipher Type Menu ===\n";
+    cout << "1. Monoalphabetic Cipher\n";
+    cout << "2. Polyalphabetic Cipher\n";
+    cout << "Enter choice (1-2): ";
+    cin >> cipherType;
     cin.ignore(); // Clear input buffer
 
-    switch (choice) {
-        case 1: {
-            string key;
-            cout << "Enter the key: ";
-            getline(cin, key);
+    if (cipherType == 1) {
+        int choice;
+        cout << "=== Monoalphabetic Cipher Menu ===\n";
+        cout << "1. Caesar Cipher\n";
+        cout << "2. Affine Cipher\n";
+        cout << "Enter choice (1-2): ";
+        cin >> choice;
+        cin.ignore();
 
-            string cipher = PlayfairCipher(message, key);
-            cout << "\nPlayfair Encoded: " << cipher;
-            cout << "\nPlayfair Decoded: " << PlayfairDecipher(cipher, key);
-            break;
-        }
-        case 2: {
-            vector<vector<int>> key(2, vector<int>(2));
-            cout << "Enter 2x2 key matrix:\n";
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < 2; j++) {
-                    cout << "key[" << i << "][" << j << "]: ";
-                    cin >> key[i][j];
-                }
+        string message;
+        cout << "Enter the Message: ";
+        getline(cin, message);
+
+        switch (choice) {
+            case 1: {
+                int key;
+                cout << "Enter key (1-25): ";
+                cin >> key;
+
+                string cipher = encipherCeaserCipher(message, key);
+                cout << "\nCaesar Encoded: " << cipher;
+                cout << "\nCaesar Decoded: " << decipherCeaserCipher(cipher, key);
+                break;
             }
-            cin.ignore(); // Clear input buffer after reading numbers
+            case 2: {
+                int key1, key2;
+                cout << "Enter key1 (multiplicative key): ";
+                cin >> key1;
+                cout << "Enter key2 (additive key): ";
+                cin >> key2;
 
-            string cipher = HillCipher(message, key);
-            cout << "\nHill Encoded: " << cipher;
-            cout << "\nHill Decoded: " << HillDecipher(cipher, key);
-            break;
+                string cipher = affineCipher(message, key1 % 26, key2 % 26);
+                cout << "\nAffine Encoded: " << cipher;
+                cout << "\nAffine Decoded: " << affineDecipher(cipher, key1 % 26, key2 % 26);
+                break;
+            }
+            default:
+                cout << "Invalid choice! Please select 1-2.";
         }
-        case 3: {
-            int key;
-            cout << "Enter key (1-25): ";
-            cin >> key;
-            cin.ignore();
+    } else if (cipherType == 2) {
+        int choice;
+        cout << "=== Polyalphabetic Cipher Menu ===\n";
+        cout << "1. Playfair Cipher\n";
+        cout << "2. Hill Cipher\n";
+        cout << "3. Vigenere Cipher\n";
+        cout << "4. Vernam Cipher\n";
+        cout << "Enter choice (1-4): ";
+        cin >> choice;
+        cin.ignore();
 
-            string cipher = encipherCeaserCipher(message, key);
-            cout << "\nCaesar Encoded: " << cipher;
-            cout << "\nCaesar Decoded: " << decipherCeaserCipher(cipher, key);
-            break;
-        }
-        case 4: {
-            string key;
-            cout << "Enter key: ";
-            getline(cin, key);
+        string message;
+        cout << "Enter the Message: ";
+        getline(cin, message);
 
-            string cipher = encipherVinereCipher(message, key);
-            cout << "\nVigenere Encoded: " << cipher;
-            cout << "\nVigenere Decoded: " << decipherVinereCipher(cipher, key);
-            break;
+        switch (choice) {
+            case 1: {
+                string key;
+                cout << "Enter the key: ";
+                getline(cin, key);
+
+                string cipher = PlayfairCipher(message, key);
+                cout << "\nPlayfair Encoded: " << cipher;
+                cout << "\nPlayfair Decoded: " << PlayfairDecipher(cipher, key);
+                break;
+            }
+            case 2: {
+                vector<vector<int>> key(2, vector<int>(2));
+                cout << "Enter 2x2 key matrix:\n";
+                for (int i = 0; i < 2; i++) {
+                    for (int j = 0; j < 2; j++) {
+                        cout << "key[" << i << "][" << j << "]: ";
+                        cin >> key[i][j];
+                    }
+                }
+
+                string cipher = HillCipher(message, key);
+                cout << "\nHill Encoded: " << cipher;
+                cout << "\nHill Decoded: " << HillDecipher(cipher, key);
+                break;
+            }
+            case 3: {
+                string key;
+                cout << "Enter key: ";
+                getline(cin, key);
+
+                string cipher = encipherVinereCipher(message, key);
+                cout << "\nVigenere Encoded: " << cipher;
+                cout << "\nVigenere Decoded: " << decipherVinereCipher(cipher, key);
+                break;
+            }
+            case 4: {
+                string key;
+                cout << "Enter key (same length as message): ";
+                getline(cin, key);
+
+                string cipher = classicVernamCipher(message, key);
+                cout << "\nVernam Encoded: " << cipher;
+                cout << "\nVernam Decoded: " << classicVernamDecipher(cipher, key);
+                break;
+            }
+            default:
+                cout << "Invalid choice! Please select 1-4.";
         }
-        default:
-            cout << "Invalid choice! Please select 1-4.";
+    } else {
+        cout << "Invalid cipher type! Please select 1-2.";
     }
 
     return 0;
