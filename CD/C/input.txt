@@ -1,4 +1,13 @@
-int main = 5;
-float pi = 3.14;
-my_var = main + 100;
-return my_var;
+int x, y, z;
+float average;
+char name[50];
+x = 10;
+y = 20;
+average = (x + y) / 2.0;
+int x;
+result = x + y;
+int class;
+double pi = 3.14159;
+for = 5;
+n = 22
+void function_name();

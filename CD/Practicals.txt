@@ -1,0 +1,15 @@
+==========================Practical 1===================================
+a) Write a c program to check weather a input string contains only alphanumeric chars, whitespaces and allowed symbols(*&^%#$!(),;)
+b) Count and print the number of keywords in a source code, compare each token with a keyword list
+c) Identify all delimiters like ; , () and punctuation symbols
+d) Recognize characters and string literals enclosed '' or ""
+e) Write a lex program to identify keywords identifiers and numbers
+
+
+==========================Practical 2===================================
+Construct symbol table and identify lexical errors in declarations and uses
+a) Write a C program to extract declared identifiers and store them in a symbol table 
+b) Display identifier name, datatype, scope and line number in a tabular format
+c) Check if an identifier has been declared before use 
+d) Detect multiple declarations of the same identifiers 
+e) Report misuse of keywords as identifiers
