@@ -9,5 +9,5 @@ result = x + y;
 int class;
 double pi = 3.14159;
 for = 5;
-n = 22
+;;n = 22;
 void function_name();
