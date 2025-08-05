@@ -1,0 +1,13 @@
+CNS Prac3:
+
+AIM:
+To implement algo for real world applications to ensure confidentiality, integrity and authenticity of data.
+
+Objective1:(3a): 
+Implement Euclid and extended Euclid algo to compute the GCD of two integers. Extended Euclid algo not only
+computes gcd of two integers but also finds the coefficient of Bezout's Identity Integers.
+
+Objective2:(3b):
+Implement Hill cipher method to encrypt and derypt the financial data during the transmission.
+the tech should be able to handle large amount of data efficiently and should be resistant to cryptanalysis 
+and interception by unauthorised users.
