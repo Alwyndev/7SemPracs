@@ -1,0 +1,1 @@
+block_size = (n.bit_length() - 1) // 8

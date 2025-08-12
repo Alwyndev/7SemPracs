@@ -11,3 +11,6 @@ Objective2:(3b):
 Implement Hill cipher method to encrypt and derypt the financial data during the transmission.
 the tech should be able to handle large amount of data efficiently and should be resistant to cryptanalysis 
 and interception by unauthorised users.
+
+
+To understand the concept of Asymmetric key cryptographic algo. using RSA algo and Euler's Totient fn.
