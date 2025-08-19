@@ -13,4 +13,6 @@ the tech should be able to handle large amount of data efficiently and should be
 and interception by unauthorised users.
 
 
-To understand the concept of Asymmetric key cryptographic algo. using RSA algo and Euler's Totient fn.
+Aim : To understand the concept of Asymmetric key cryptographic algo. using RSA algo and Euler's Totient fn.
+
+Aim : To explore triple DES using Virtual labs

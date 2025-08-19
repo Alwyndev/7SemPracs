@@ -13,3 +13,9 @@ b) Display identifier name, datatype, scope and line number in a tabular format
 c) Check if an identifier has been declared before use 
 d) Detect multiple declarations of the same identifiers 
 e) Report misuse of keywords as identifiers
+
+==========================Practical 3===================================
+CGF construction and First and Follow set Computation
+a) Define a CFG for simple arithmatic expression involving +,-,*,/. 
+b) WAP to compute First set for all Non Terminals of the grammar.
+c) WAP to compute Follow set for all Non Terminals of the grammar.
