@@ -6,7 +6,156 @@ def normalize_epsilon(tok: str) -> str:
     return "ε" if tok in EPS_SYMS else tok
 
 def normalize_apostrophes(s: str) -> str:
-    return s.replace("’", "'").replace("‘", "'")
+    return s.replace("'", "'").replace("'", "'")
+
+class ParseTree:
+    def __init__(self, symbol):
+        self.symbol = symbol
+        self.children = []
+    
+    def add_child(self, child):
+        self.children.append(child)
+    
+    def print_tree(self, indent=0):
+        print("  " * indent + self.symbol)
+        for child in self.children:
+            if isinstance(child, ParseTree):
+                child.print_tree(indent + 1)
+
+class PredictiveParser:
+    def __init__(self, grammar):
+        self.grammar = grammar
+        self.parsing_table = {}
+        self.build_parsing_table()
+    
+    def build_parsing_table(self):
+        """Build LL(1) parsing table using FIRST and FOLLOW sets"""
+        # Initialize table
+        for nt in self.grammar.non_terminals:
+            self.parsing_table[nt] = {}
+        
+        # For each production A -> α
+        for lhs, rhs in self.grammar.productions:
+            # Get FIRST(α)
+            first_alpha = self.grammar.first_of_sequence(rhs)
+            
+            # For each terminal a in FIRST(α)
+            for terminal in first_alpha:
+                if terminal != "ε":
+                    if terminal not in self.parsing_table[lhs]:
+                        self.parsing_table[lhs][terminal] = (lhs, rhs)
+                    else:
+                        print(f"Conflict at [{lhs}, {terminal}] - Grammar not LL(1)")
+            
+            # If ε in FIRST(α), add A -> α to M[A, b] for each b in FOLLOW(A)
+            if "ε" in first_alpha:
+                for terminal in self.grammar.follow_sets[lhs]:
+                    if terminal not in self.parsing_table[lhs]:
+                        self.parsing_table[lhs][terminal] = (lhs, rhs)
+                    else:
+                        print(f"Conflict at [{lhs}, {terminal}] - Grammar not LL(1)")
+    
+    def print_parsing_table(self):
+        """Print the parsing table"""
+        print("\nParsing Table:")
+        print("-" * 50)
+        
+        # Get all terminals that appear in the table
+        all_terminals = set()
+        for nt_dict in self.parsing_table.values():
+            all_terminals.update(nt_dict.keys())
+        all_terminals = sorted(all_terminals)
+        
+        # Print header
+        print(f"{'NT':<8}", end="")
+        for term in all_terminals:
+            print(f"{term:<12}", end="")
+        print()
+        print("-" * (8 + 12 * len(all_terminals)))
+        
+        # Print table rows
+        for nt in self.grammar.non_terminals:
+            print(f"{nt:<8}", end="")
+            for term in all_terminals:
+                if term in self.parsing_table[nt]:
+                    lhs, rhs = self.parsing_table[nt][term]
+                    prod = f"{lhs}→{''.join(rhs)}"
+                    print(f"{prod:<12}", end="")
+                else:
+                    print(f"{'--':<12}", end="")
+            print()
+    
+    def parse(self, input_string):
+        """Parse input string and return parse tree"""
+        tokens = self.grammar.tokenize_rhs_part(input_string)
+        tokens.append("$")  # End of input marker
+        
+        stack = ["$", self.grammar.start_symbol]
+        parse_tree = ParseTree(self.grammar.start_symbol)
+        node_stack = [None, parse_tree]  # Stack to track tree nodes
+        
+        input_ptr = 0
+        
+        print(f"\nParsing: {' '.join(tokens[:-1])}")
+        print(f"{'Step':<5} {'Stack':<25} {'Input':<20} {'Action'}")
+        print("-" * 70)
+        
+        step = 1
+        while len(stack) > 1:
+            top = stack[-1]
+            current_input = tokens[input_ptr] if input_ptr < len(tokens) else "$"
+            current_node = node_stack[-1]
+            
+            # Display current state
+            stack_str = ' '.join(stack)
+            input_str = ' '.join(tokens[input_ptr:])
+            print(f"{step:<5} {stack_str:<25} {input_str:<20}", end=" ")
+            
+            if top == current_input:
+                # Match terminal
+                stack.pop()
+                node_stack.pop()
+                input_ptr += 1
+                print(f"Match {top}")
+            elif self.grammar.is_non_terminal(top):
+                # Apply production
+                if top in self.parsing_table and current_input in self.parsing_table[top]:
+                    lhs, rhs = self.parsing_table[top][current_input]
+                    stack.pop()
+                    node_stack.pop()
+                    
+                    # Add children to parse tree
+                    if rhs != ["ε"]:
+                        # Add symbols to stack in reverse order
+                        for symbol in reversed(rhs):
+                            stack.append(symbol)
+                        
+                        # Add children to tree in correct order
+                        for symbol in rhs:
+                            child_node = ParseTree(symbol)
+                            current_node.add_child(child_node)
+                            node_stack.append(child_node)
+                    else:
+                        # Epsilon production
+                        epsilon_node = ParseTree("ε")
+                        current_node.add_child(epsilon_node)
+                    
+                    print(f"Apply {lhs} → {''.join(rhs)}")
+                else:
+                    print(f"ERROR: No rule for [{top}, {current_input}]")
+                    return None
+            else:
+                print(f"ERROR: Expected {top}, got {current_input}")
+                return None
+            
+            step += 1
+        
+        if input_ptr == len(tokens) - 1 and tokens[input_ptr] == "$":
+            print("Parsing successful!")
+            return parse_tree
+        else:
+            print("Parsing failed!")
+            return None
 
 class Grammar:
     def __init__(self, non_terminals, start_symbol):
@@ -159,8 +308,12 @@ class Grammar:
         self.compute_first()
         self.compute_follow()
 
+    def create_parser(self):
+        """Create a predictive parser for this grammar"""
+        return PredictiveParser(self)
+
     def print_first_sets(self):
-        def disp_nt(nt): return nt.replace("'", "’")
+        def disp_nt(nt): return nt.replace("'", "'")
         def disp_tok(t):
             if self.is_non_terminal(t) and t != "ε":  # skip non-terminals inside FIRST
                 return None
@@ -188,7 +341,7 @@ class Grammar:
             print(f"{lhs_chain} = {{ " + " , ".join(ordered) + " }}")
 
     def print_follow_sets(self):
-        def disp_nt(nt): return nt.replace("'", "’")
+        def disp_nt(nt): return nt.replace("'", "'")
         def disp_tok(t):
             if self.is_non_terminal(t) and t != "ε":
                 return None
@@ -223,9 +376,8 @@ def main():
     start_symbol = normalize_apostrophes(input("Enter the start symbol :  ").strip())
     grammar = Grammar(non_terminals, start_symbol)
     print("Enter the productions in the format 'A -> a | b':")
-    # Read until blank line or until at least one production per non-terminal
+    
     lines_read = 0
-    # We cannot rely strictly on n lines because some lines may contain multiple alternatives.
     while True:
         try:
             line = input()
@@ -235,13 +387,34 @@ def main():
             break
         grammar.parse_production_line(line)
         lines_read += 1
+    
     grammar.compute()
+    
     # Echo grammar (original lines as entered)
     print()
     for line in grammar.original_lines:
         print(line)
+    
     grammar.print_first_sets()
     grammar.print_follow_sets()
+    
+    # Create parser and show parsing table
+    parser = grammar.create_parser()
+    parser.print_parsing_table()
+    
+    # Parse input strings
+    while True:
+        try:
+            input_str = input("\nEnter string to parse (or press Enter to quit): ").strip()
+            if not input_str:
+                break
+            
+            parse_tree = parser.parse(input_str)
+            if parse_tree:
+                print("\nParse Tree:")
+                parse_tree.print_tree()
+        except EOFError:
+            break
 
 if __name__ == "__main__":
     main()

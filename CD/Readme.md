@@ -4,19 +4,20 @@
 ## 📑 Table of Contents
 1. Overview
 2. Project Structure
-3. Practical 1
-4. Practical 2
-5. Build & Run
-6. Sample Usage
-7. Learning Objectives
-8. Key Concepts
-9. Assignment Details
-10. Recent Changes
-11. Prerequisites
-12. Advanced Usage
-13. Future Enhancements
-14. Contributing
-15. License
+3. File Renaming Guide
+4. Practical 1
+5. Practical 2
+6. Build & Run
+7. Sample Usage
+8. Learning Objectives
+9. Key Concepts
+10. Assignment Details
+11. Recent Changes
+12. Prerequisites
+13. Advanced Usage
+14. Future Enhancements
+15. Contributing
+16. License
 
 This repository contains practical implementations for Compiler Design course covering lexical analysis, tokenization, and symbol table management using both C and Python.
 
@@ -24,28 +25,45 @@ This repository contains practical implementations for Compiler Design course co
 
 ```
 CD/
-├── C/                      # C implementations
-│   ├── practical1_1.c     # String validation
-│   ├── practical1_2.c     # Keyword counter
-│   ├── Practical1_3.c     # Delimiter/punctuation identifier
-│   ├── Practical1_4.c     # String/character literal recognizer
-│   ├── ex.l               # Lex specification file
-│   ├── lex.yy.c           # Generated lexer from Flex
-│   ├── Practical2.c       # Symbol table implementation
-│   ├── input.txt          # Test input for symbol table
-│   └── *.exe              # Compiled executables
-├── python/                 # Python implementations
-│   ├── practical1_1.py    # Character validation
-│   └── practical1_2.py    # Advanced tokenizer
-├── Practicals.txt         # Assignment descriptions
-└── README.md              # This file
+├── C/                                  # C implementations
+│   ├── string_validator.c              # (rename from practical1_1.c) String validation
+│   ├── keyword_counter.c               # (rename from practical1_2.c) Keyword counter
+│   ├── delimiter_detector.c            # (rename from Practical1_3.c) Delimiter/punctuation identifier
+│   ├── literal_extractor.c             # (rename from Practical1_4.c) String/character literal recognizer
+│   ├── c_lexer.l                       # (rename from ex.l) Lex specification file
+│   ├── lex.yy.c                        # Generated lexer from Flex
+│   ├── symbol_table_manager.c          # (rename from Practical2.c) Symbol table implementation
+│   ├── test_input.txt                  # (rename from input.txt) Test input for symbol table
+│   └── *.exe                           # Compiled executables
+├── python/                             # Python implementations
+│   ├── character_validator.py          # (rename from practical1_1.py) Character validation
+│   └── advanced_tokenizer.py           # (rename from practical1_2.py) Advanced tokenizer
+├── assignment_descriptions.txt         # (rename from Practicals.txt) Assignment descriptions
+└── README.md                           # This file
 ```
+
+## 🗂️ File Renaming Guide
+
+**Suggested Renames** (based on functionality):
+
+| Current Name | Suggested Name | Reason |
+|--------------|----------------|--------|
+| `practical1_1.c` | `string_validator.c` | Validates string content |
+| `practical1_2.c` | `keyword_counter.c` | Counts C keywords |
+| `Practical1_3.c` | `delimiter_detector.c` | Detects delimiters/punctuation |
+| `Practical1_4.c` | `literal_extractor.c` | Extracts string/char literals |
+| `Practical2.c` | `symbol_table_manager.c` | Manages symbol table |
+| `ex.l` | `c_lexer.l` | Lex rules for C tokens |
+| `practical1_1.py` | `character_validator.py` | Character validation |
+| `practical1_2.py` | `advanced_tokenizer.py` | Advanced tokenization |
+| `input.txt` | `test_input.txt` | Test input data |
+| `Practicals.txt` | `assignment_descriptions.txt` | Assignment descriptions |
 
 ## 🎯 Practical 1: Lexical Analysis Fundamentals
 
 ### Part A: String Validation
 
-#### C Implementation ([`practical1_1.c`](C/practical1_1.c))
+#### C Implementation ([`string_validator.c`](C/string_validator.c))
 - **Purpose**: Validates if input string contains only alphanumeric characters, whitespaces, and allowed operators
 - **Functions**:
   - `isAlpha()`, `isDigit()`, `isAlNum()` - Character type checking
@@ -53,14 +71,14 @@ CD/
   - `isValidString()` - Main validation logic
 - **Usage**: Compile and run to check string validity
 
-#### Python Implementation ([`practical1_1.py`](python/practical1_1.py))
+#### Python Implementation ([`character_validator.py`](python/character_validator.py))
 - **Purpose**: Similar validation using custom character checking functions
 - **Features**: Manual implementation of character type checking without using built-in methods
-- **Usage**: `python practical1_1.py`
+- **Usage**: `python character_validator.py`
 
 ### Part B: Keyword Counter
 
-#### [`practical1_2.c`](C/practical1_2.c)
+#### [`keyword_counter.c`](C/keyword_counter.c)
 - **Purpose**: Counts and identifies C keywords in source code
 - **Features**:
   - Comprehensive C keyword list (34 keywords)
@@ -71,7 +89,7 @@ CD/
 
 ### Part C: Delimiter and Punctuation Identifier
 
-#### [`Practical1_3.c`](C/Practical1_3.c)
+#### [`delimiter_detector.c`](C/delimiter_detector.c)
 - **Purpose**: Identifies and reports positions of delimiters and punctuation marks
 - **Supported Delimiters**: `;`, `,`, `(`, `)`, `{`, `}`, `[`, `]`, `:`, `.`
 - **Supported Punctuation**: `!`, `?`, `'`, `"`, `-`, `#`, `@`, `/`
@@ -83,7 +101,7 @@ CD/
 
 ### Part D: String and Character Literal Recognition
 
-#### [`Practical1_4.c`](C/Practical1_4.c)
+#### [`literal_extractor.c`](C/literal_extractor.c)
 - **Purpose**: Extracts and displays string literals (`"..."`) and character literals (`'...'`)
 - **Features**:
   - Handles both single and double quotes
@@ -93,7 +111,7 @@ CD/
 
 ### Part E: Lex Program for Token Recognition
 
-#### [`ex.l`](C/ex.l) - Flex Specification
+#### [`c_lexer.l`](C/c_lexer.l) - Flex Specification
 - **Purpose**: Defines lexical rules for tokenizing C-like code
 - **Token Types**:
   - **Keywords**: `int`, `float`, `return`, `if`, `else`, `while`, `for`, `void`, `char`, `double`
@@ -102,7 +120,7 @@ CD/
   - **Others**: Unrecognized characters
 - **Generated Output**: [`lex.yy.c`](C/lex.yy.c) (auto-generated by Flex)
 
-#### Advanced Python Tokenizer ([`practical1_2.py`](python/practical1_2.py))
+#### Advanced Python Tokenizer ([`advanced_tokenizer.py`](python/advanced_tokenizer.py))
 - **Purpose**: Comprehensive tokenizer with statistics
 - **Token Types**:
   - **KEYWORD**: Reserved words
@@ -121,7 +139,7 @@ CD/
 
 ## 🗃️ Practical 2: Symbol Table Implementation
 
-### [`Practical2.c`](C/Practical2.c) - Complete Symbol Table System
+### [`symbol_table_manager.c`](C/symbol_table_manager.c) - Complete Symbol Table System
 
 **Purpose**: Implements a full-featured symbol table for lexical analysis with error detection.
 
@@ -152,7 +170,7 @@ CD/
    - `int`, `float`, `double`, `char`, `void`
    - `long`, `short`, `unsigned`, `signed`
 
-#### Test Input ([`input.txt`](C/input.txt))
+#### Test Input ([`test_input.txt`](C/test_input.txt))
 Contains sample C code with various scenarios:
 - Valid declarations
 - Multiple declarations (error case)
@@ -174,22 +192,22 @@ Contains sample C code with various scenarios:
 cd C/
 
 # Compile individual programs
-gcc practical1_1.c -o practical1_1.exe
-gcc practical1_2.c -o practical1_2.exe
-gcc Practical1_3.c -o Practical1_3.exe
-gcc Practical1_4.c -o Practical1_4.exe
-gcc Practical2.c -o Practical2.exe
+gcc string_validator.c -o string_validator.exe
+gcc keyword_counter.c -o keyword_counter.exe
+gcc delimiter_detector.c -o delimiter_detector.exe
+gcc literal_extractor.c -o literal_extractor.exe
+gcc symbol_table_manager.c -o symbol_table_manager.exe
 
 # For Lex program (requires Flex)
-flex ex.l
+flex c_lexer.l
 gcc lex.yy.c -o lexer.exe
 
 # Run programs
-./practical1_1.exe
-./practical1_2.exe
-./Practical1_3.exe
-./Practical1_4.exe
-./Practical2.exe
+./string_validator.exe
+./keyword_counter.exe
+./delimiter_detector.exe
+./literal_extractor.exe
+./symbol_table_manager.exe
 ./lexer.exe
 ```
 
@@ -199,8 +217,8 @@ gcc lex.yy.c -o lexer.exe
 cd python/
 
 # Run programs
-python practical1_1.py
-python practical1_2.py
+python character_validator.py
+python advanced_tokenizer.py
 ```
 
 ## 📝 Sample Usage
@@ -255,14 +273,16 @@ Error: Multiple declaration of identifier 'x' in scope 'global' at line 4
 
 ## 📋 Assignment Details
 
-Detailed assignment descriptions are available in [`Practicals.txt`](Practicals.txt), covering:
+Detailed assignment descriptions are available in [`assignment_descriptions.txt`](assignment_descriptions.txt), covering:
 - **Practical 1**: Complete lexical analysis implementation
 - **Practical 2**: Symbol table construction with error detection
 
 This implementation serves as a foundation for understanding compiler design principles and lexical analysis techniques.
 
 ## 🔄 Recent Changes (2025-08)
-- Added Table of Contents
+- Added descriptive file naming suggestions
+- Updated all file references to use meaningful names
+- Added File Renaming Guide table
 - Clarified prerequisites and environment setup
 - Added input redirection examples
 - Added rebuild / clean instructions for Flex-generated files
@@ -284,14 +304,14 @@ Optional (recommended):
 ### Provide multiline input from a file
 Instead of typing manually:
 ```
-./Practical2.exe < input.txt
-./practical1_2.exe < some_source.c
+./symbol_table_manager.exe < test_input.txt
+./keyword_counter.exe < some_source.c
 ```
 
 ### Regenerate lexer cleanly
 ```
 cd C
-flex ex.l
+flex c_lexer.l
 gcc lex.yy.c -o lexer.exe
 ```
 
@@ -304,14 +324,13 @@ del C\*.exe
 
 ### Run Python tokenizer on inline code
 ```
-echo "int a=5; float b=2.5;" | python practical1_2.py
+echo "int a=5; float b=2.5;" | python advanced_tokenizer.py
 ```
 
 ## ⚠️ Known Limitations
-- String/char literal handling (Practical1_4.c) does not process escaped quotes (e.g., \" or \')
-- No handling of comments in some C parsers (may treat contents as tokens)
-- Symbol table has fixed capacity (100) and linear lookup (can be optimized with hashing)
-- Lex spec (ex.l) covers a limited subset of C tokens
+- String/char literal handling (literal_extractor.c) does not process escaped quotes
+- Symbol table has fixed capacity (100) and linear lookup
+- Lex spec (c_lexer.l) covers a limited subset of C tokens
 
 ## 🚀 Future Enhancements (Suggested)
 - Add escaped sequence handling in string/char literal recognizer
