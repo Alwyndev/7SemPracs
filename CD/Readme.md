@@ -1,5 +1,23 @@
 # Compiler Design Practicals
 
+<!-- Added Table of Contents -->
+## 📑 Table of Contents
+1. Overview
+2. Project Structure
+3. Practical 1
+4. Practical 2
+5. Build & Run
+6. Sample Usage
+7. Learning Objectives
+8. Key Concepts
+9. Assignment Details
+10. Recent Changes
+11. Prerequisites
+12. Advanced Usage
+13. Future Enhancements
+14. Contributing
+15. License
+
 This repository contains practical implementations for Compiler Design course covering lexical analysis, tokenization, and symbol table management using both C and Python.
 
 ## 📁 Project Structure
@@ -242,3 +260,75 @@ Detailed assignment descriptions are available in [`Practicals.txt`](Practicals.
 - **Practical 2**: Symbol table construction with error detection
 
 This implementation serves as a foundation for understanding compiler design principles and lexical analysis techniques.
+
+## 🔄 Recent Changes (2025-08)
+- Added Table of Contents
+- Clarified prerequisites and environment setup
+- Added input redirection examples
+- Added rebuild / clean instructions for Flex-generated files
+- Added Future Enhancements & Contributing sections
+- Noted filename casing (Readme.md vs README.md)
+
+## ✅ Prerequisites
+- GCC (e.g., MinGW / GNU GCC 9+)
+- Flex (for ex.l) and (optionally) Bison/Yacc for future grammar work
+- Python 3.8+ (for tokenizer scripts)
+- A terminal supporting standard I/O redirection
+
+Optional (recommended):
+- make (You can create a simple Makefile later)
+- Git
+
+## 🧪 Advanced / Recommended Usage
+
+### Provide multiline input from a file
+Instead of typing manually:
+```
+./Practical2.exe < input.txt
+./practical1_2.exe < some_source.c
+```
+
+### Regenerate lexer cleanly
+```
+cd C
+flex ex.l
+gcc lex.yy.c -o lexer.exe
+```
+
+### Clean generated artifacts (manual)
+```
+del C\lex.yy.c
+del C\*.exe
+```
+(Use rm on UNIX-like systems.)
+
+### Run Python tokenizer on inline code
+```
+echo "int a=5; float b=2.5;" | python practical1_2.py
+```
+
+## ⚠️ Known Limitations
+- String/char literal handling (Practical1_4.c) does not process escaped quotes (e.g., \" or \')
+- No handling of comments in some C parsers (may treat contents as tokens)
+- Symbol table has fixed capacity (100) and linear lookup (can be optimized with hashing)
+- Lex spec (ex.l) covers a limited subset of C tokens
+
+## 🚀 Future Enhancements (Suggested)
+- Add escaped sequence handling in string/char literal recognizer
+- Extend lex rules: comments, multi-line strings, operators (++, --, +=, etc.)
+- Introduce a hash-based symbol table
+- Add scope push/pop (block-level) using a stack
+- Integrate a simple parser (expression / declaration grammar)
+- Add unit tests (e.g., using Python's unittest or a shell test harness)
+- Provide a Makefile for cross-platform builds
+- Add CI workflow (GitHub Actions) for automatic build/test
+
+## 🤝 Contributing
+1. Fork repository
+2. Create a feature branch
+3. Keep changes modular (one practical / fix per commit)
+4. Submit PR with a short rationale
+5. Ensure examples still compile
+
+## 📄 License
+Educational use. Add a LICENSE file (e.g., MIT) if redistribution is intended.
